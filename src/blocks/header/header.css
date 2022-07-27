@@ -1,0 +1,15 @@
+.header {
+  max-width: 880px;
+  min-height: 74px;
+  display: flex;
+  margin: 0 auto;
+  border-bottom: 1px solid hsl(0, 0%, 33%, 0.7);
+  padding-top: 45px;
+}
+
+@media screen and (max-width: 1023px) {
+  .header {
+    padding-top: 28px;
+    min-height: 56px;
+  }
+}

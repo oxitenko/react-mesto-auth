@@ -1,0 +1,7 @@
+.popup__close-button_place_popupview {
+  position: relative;
+  align-self: flex-end;
+  display: flex;
+  top: -15px;
+  flex-shrink: 0;
+}

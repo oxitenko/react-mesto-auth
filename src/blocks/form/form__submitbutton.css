@@ -1,0 +1,21 @@
+.form__submitbutton {
+  width: 358px;
+  height: 50px;
+  background: #ffffff;
+  border-radius: 2px;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: #000000;
+  border: none;
+  margin-top: 216px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.form__submitbutton:hover {
+  opacity: 0.85;
+}
