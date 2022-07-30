@@ -18,7 +18,7 @@ function Header(props) {
           Войти
         </Link>
       ) : location.pathname === "/" ? (
-        <div className="hrader__container">
+        <div className="header__container">
           <p className="header__email">{props.loggedIn.email}</p>
           <p onClick={props.onLoguot} className="header__outlink">
             Выйти
