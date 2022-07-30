@@ -15,29 +15,18 @@ function InfoTooltip(props) {
           onClick={props.onClose}
         ></button>
         <div className="popup__authmessage">
-          {props.onLogin ? (
-            <>
-              <img
-                className="popup__authicon"
-                src={successIcon}
-                alt="Логотип успешной регистрации"
-              />
-              <h2 className="popup__title popup__title_type_element-auth">
-                Вы успешно зарегистрировались!
-              </h2>
-            </>
-          ) : (
-            <>
-              <img
-                className="popup__authicon"
-                src={errorIcon}
-                alt="Логотип ошибки регистрации"
-              />
-              <h2 className="popup__title popup__title_type_element-auth">
-                Что-то пошло не так! Попробуйте ещё раз.
-              </h2>
-            </>
-          )}
+          <>
+            <img
+              className="popup__authicon"
+              src={props.status ? successIcon : errorIcon}
+              alt="Логотип успешной регистрации"
+            />
+            <h2 className="popup__title popup__title_type_element-auth">
+              {props.status
+                ? "Вы успешно зарегистрировались!"
+                : "Что-то пошло не так! Попробуйте ещё раз."}
+            </h2>
+          </>
         </div>
       </div>
     </div>

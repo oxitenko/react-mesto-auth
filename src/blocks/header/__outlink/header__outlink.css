@@ -1,0 +1,16 @@
+.header__outlink {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: right;
+  color: #a9a9a9;
+  cursor: pointer;
+  margin: 0;
+  margin-left: 24px;
+}
+
+.header__outlink:hover {
+  opacity: 0.6;
+}

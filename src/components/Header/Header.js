@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import pageLogo from "../../images/header-logo.svg";
 
-function Header() {
+function Header(props) {
   let location = useLocation();
 
   return (
@@ -17,6 +17,13 @@ function Header() {
         <Link className="header__link" to="signin">
           Войти
         </Link>
+      ) : location.pathname === "/" ? (
+        <div className="hrader__container">
+          <p className="header__email">{props.loggedIn.email}</p>
+          <p onClick={props.onLoguot} className="header__outlink">
+            Выйти
+          </p>
+        </div>
       ) : (
         ""
       )}

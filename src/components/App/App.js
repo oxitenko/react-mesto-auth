@@ -24,9 +24,10 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({ name: "", about: "" });
   const [isLoading, setIsLoading] = useState(false);
-  // const [authUser, setAuthUser] = useState({ email: "" });
+  const [authUser, setAuthUser] = useState({ email: "" });
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [authMessage, setAuthMessage] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -158,21 +159,60 @@ function App() {
     return auth
       .register(data)
       .then(() => {
-        setLoggedIn(true);
         setIsInfoTooltipOpen(true);
-        history.push("/main");
+        setAuthMessage(true);
+        history.push("/signin");
       })
       .catch(() => {
         setIsInfoTooltipOpen(true);
+        setAuthMessage(false);
       });
+  }
+
+  function onLogin(data) {
+    return auth
+      .authorize(data)
+      .then((res) => {
+        setLoggedIn(true);
+        localStorage.setItem("jwt", res.token);
+      })
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    if (loggedIn) {
+      history.push("/");
+    }
+  }, [loggedIn, history]);
+
+  function tokenCheck() {
+    const jwt = localStorage.getItem("jwt");
+    if (!jwt) {
+      return;
+    }
+    auth.getContent(jwt).then((res) => {
+      setAuthUser({ email: res.data.email });
+      setLoggedIn(true);
+    });
+  }
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
+
+  function onLoguot() {
+    setLoggedIn(false);
+    localStorage.removeItem("jwt");
+    history.push("/signin");
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div>
-        <Header />
+        <Header loggedIn={authUser} onLoguot={onLoguot} />
         <Switch>
           <ProtectedRoute
+            exact
             path="/"
             loggedIn={loggedIn}
             component={Main}
@@ -184,13 +224,19 @@ function App() {
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
           />
-          <Footer />
+
+          <ProtectedRoute
+            exact
+            path="/"
+            component={Footer}
+            loggedIn={loggedIn}
+          />
 
           <Route path="/signup">
             <Register onRegister={onRegister} />
           </Route>
           <Route path="/signin">
-            <Login />
+            <Login onLogin={onLogin} />
           </Route>
           <Route>
             {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
@@ -221,7 +267,7 @@ function App() {
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
           onClose={closeAllPopups}
-          onLogin={loggedIn}
+          status={authMessage}
         />
 
         <PopupWithForm
