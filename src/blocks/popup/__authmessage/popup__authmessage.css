@@ -1,0 +1,6 @@
+.popup__authmessage {
+  display: flex;
+  flex-direction: column;
+  margin-top: 60px;
+  align-items: center;
+}

@@ -3,7 +3,7 @@ import Main from "../Main/Main";
 import Footer from "../Footer/Footer";
 import PopupWithForm from "../PopupWithForm/PopupWithForm";
 import ImagePopup from "../ImagePopup/ImagePopup";
-import { useEffect, useState } from "react";
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import Register from "../Register/Register";
 import Login from "../Login/Login";
 import api from "../../utils/Api";
@@ -11,16 +11,23 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
-import { Route, Switch } from "react-router-dom";
+import * as auth from "../../auth/Auth";
+import { Route, Switch, Redirect, useHistory } from "react-router-dom";
+import { useEffect, useState } from "react";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({ name: "", about: "" });
-  const [cards, setCards] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  // const [authUser, setAuthUser] = useState({ email: "" });
+  const [cards, setCards] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
     api
@@ -83,6 +90,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setSelectedCard({});
+    setIsInfoTooltipOpen(false);
   }
 
   function handleCardLike(card) {
@@ -126,6 +134,7 @@ function App() {
       .finally(() => setIsLoading(false));
   }
   const isOpen =
+    isInfoTooltipOpen ||
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
@@ -145,28 +154,46 @@ function App() {
     }
   }, [isOpen]);
 
+  function onRegister(data) {
+    return auth
+      .register(data)
+      .then(() => {
+        setLoggedIn(true);
+        setIsInfoTooltipOpen(true);
+        history.push("/main");
+      })
+      .catch(() => {
+        setIsInfoTooltipOpen(true);
+      });
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div>
         <Header />
         <Switch>
-          <Route exact path="/main">
-            <Main
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-            />
-            <Footer />
+          <ProtectedRoute
+            path="/"
+            loggedIn={loggedIn}
+            component={Main}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            cards={cards}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+          />
+          <Footer />
+
+          <Route path="/signup">
+            <Register onRegister={onRegister} />
           </Route>
-          <Route exact path="/signup">
-            <Register />
-          </Route>
-          <Route exact path="/signin">
+          <Route path="/signin">
             <Login />
+          </Route>
+          <Route>
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="/signin" />}
           </Route>
         </Switch>
 
@@ -189,6 +216,12 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
           buttonText={isLoading}
+        />
+
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          onClose={closeAllPopups}
+          onLogin={loggedIn}
         />
 
         <PopupWithForm

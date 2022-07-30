@@ -5,6 +5,8 @@
   margin: 0 auto;
   border-bottom: 1px solid hsl(0, 0%, 33%, 0.7);
   padding-top: 45px;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 @media screen and (max-width: 1023px) {
