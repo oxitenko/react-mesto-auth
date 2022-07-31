@@ -19,3 +19,13 @@
 .auth-form__submitbutton:hover {
   opacity: 0.85;
 }
+
+@media screen and (max-width: 767px) {
+  .auth-form__submitbutton {
+    width: 260px;
+    height: 46px;
+    font-size: 16px;
+    line-height: 19px;
+    margin-top: 187px;
+  }
+}
