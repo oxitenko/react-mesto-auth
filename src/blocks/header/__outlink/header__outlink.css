@@ -14,3 +14,9 @@
 .header__outlink:hover {
   opacity: 0.6;
 }
+
+@media screen and (max-width: 767px) {
+  .header__outlink {
+    margin-left: 0;
+  }
+}

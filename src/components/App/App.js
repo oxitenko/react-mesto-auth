@@ -15,6 +15,7 @@ import * as auth from "../../auth/Auth";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import MobileHeader from "../MobileHeader/MobileHeader";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -28,6 +29,7 @@ function App() {
   const [cards, setCards] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [authMessage, setAuthMessage] = useState(false);
+  const [humburgerMenuOpen, setHumburgerMenuOpen] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -123,6 +125,10 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function handleToggleHumburgerMenu() {
+    setHumburgerMenuOpen(!humburgerMenuOpen);
+  }
+
   function handleAddPlaceSubmit(data) {
     setIsLoading(true);
     api
@@ -198,10 +204,11 @@ function App() {
 
   useEffect(() => {
     tokenCheck();
-  }, []);
+  }, [loggedIn]);
 
   function onLoguot() {
     setLoggedIn(false);
+    setHumburgerMenuOpen(false);
     localStorage.removeItem("jwt");
     history.push("/signin");
   }
@@ -209,7 +216,20 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div>
-        <Header loggedIn={authUser} onLoguot={onLoguot} />
+        <Header
+          menu={humburgerMenuOpen}
+          toggleMenu={handleToggleHumburgerMenu}
+          loggedIn={authUser}
+          onLoguot={onLoguot}
+        >
+          <MobileHeader
+            menu={humburgerMenuOpen}
+            toggleMenu={handleToggleHumburgerMenu}
+            loggedIn={authUser}
+            onLoguot={onLoguot}
+          />
+        </Header>
+
         <Switch>
           <ProtectedRoute
             exact

@@ -1,0 +1,19 @@
+.humburger-menu__icon {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .humburger-menu__icon {
+    display: block;
+    height: 18px;
+    width: 24px;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+    top: 3%;
+  }
+}
+
+.humburger-menu__icon:hover {
+  opacity: 0.6;
+}

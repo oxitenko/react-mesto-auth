@@ -5,7 +5,7 @@ function Header(props) {
   let location = useLocation();
 
   return (
-    <header className="header">
+    <header className={props.menu ? "header__humburger" : "header"}>
       <a href="#topofpage">
         <img className="header__logo" src={pageLogo} alt="логотип страницы" />
       </a>
@@ -27,6 +27,7 @@ function Header(props) {
       ) : (
         ""
       )}
+      {props.children}
     </header>
   );
 }

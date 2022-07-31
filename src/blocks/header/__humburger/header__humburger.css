@@ -1,0 +1,8 @@
+.header__humburger {
+  display: flex;
+  align-items: center;
+  margin-top: 142px;
+  height: 83px;
+  border-bottom: 1px solid hsl(0, 0%, 33%, 0.7);
+  border-top: 1px solid hsl(0, 0%, 33%, 0.7);
+}
