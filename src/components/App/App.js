@@ -11,7 +11,7 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import EditProfilePopup from "../EditProfilePopup/EditProfilePopup";
 import EditAvatarPopup from "../EditAvatarPopup/EditAvatarPopup";
 import AddPlacePopup from "../AddPlacePopup/AddPlacePopup";
-import * as auth from "../../auth/Auth";
+import * as auth from "../../utils/Auth";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
@@ -196,10 +196,13 @@ function App() {
     if (!jwt) {
       return;
     }
-    auth.getContent(jwt).then((res) => {
-      setAuthUser({ email: res.data.email });
-      setLoggedIn(true);
-    });
+    auth
+      .checkToken(jwt)
+      .then((res) => {
+        setAuthUser({ email: res.data.email });
+        setLoggedIn(true);
+      })
+      .catch((err) => console.log(err));
   }
 
   useEffect(() => {

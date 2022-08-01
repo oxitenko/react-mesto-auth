@@ -6,9 +6,9 @@ function Header(props) {
 
   return (
     <header className={props.menu ? "header__humburger" : "header"}>
-      <a href="#topofpage">
+      <Link to="/">
         <img className="header__logo" src={pageLogo} alt="логотип страницы" />
-      </a>
+      </Link>
       {location.pathname === "/signin" ? (
         <Link className="header__link" to="/signup">
           Регистрация

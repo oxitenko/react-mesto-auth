@@ -28,7 +28,7 @@ export function authorize({ email, password }) {
   }).then((res) => checkResponse(res));
 }
 
-export function getContent(token) {
+export function checkToken(token) {
   return fetch(`${BASE_URL}/users/me`, {
     method: "GET",
     headers: {
